@@ -86,6 +86,10 @@ async def show_version():
 @app.post("/v1/chat/completions")
 async def create_chat_completion(request: ChatCompletionRequest,
                                  raw_request: Request):
+    token_range = range(10000, 14000)
+    request.logit_bias = {str(token): -100
+                    for token in token_range},
+    print(token_range)
     generator = await openai_serving_chat.create_chat_completion(
         request, raw_request)
     if isinstance(generator, ErrorResponse):
